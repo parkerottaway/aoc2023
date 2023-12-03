@@ -24,15 +24,15 @@ jobs:
     - name: Create venv and Install Dependencies
       run: |
         python3 -m pip install --upgrade pip;
-        python3 -m venv $POETRY_HOME;
-        $POETRY_HOME/bin/pip install poetry~=1.0;
-        $POETRY_HOME/bin/poetry install;
+        python3 -m venv ${{ env.POETRY_HOME }};
+        ${{ env.POETRY_HOME }}/bin/pip install poetry~=1.0;
+        ${{ env.POETRY_HOME }}/bin/poetry install;
     - name: Run Unit and E2E Tests
       env:
         DAY01_FILE_INPUT_XZ_BASE64: ${{ secrets.DAY01_FILE_INPUT_XZ_BASE64 }}
         DAY01_PART1_SOLN: ${{ secrets.DAY01_PART1_SOLN }}
       run: |
-        $POETRY_HOME/bin/poetry shell --quiet --no-interaction;
+        ${{ env.POETRY_HOME }}/bin/poetry shell --quiet --no-interaction;
         coverage run -m pytest; coverage --quiet --skip-empty xml;
         [ $(echo -n "DAY01_FILE_INPUT_XZ_BASE64" | base64 --decode | xz --decompress --stdout | day01part1) -eq $DAY01_PART1_SOLN ];
     - name: Report Code Coverage

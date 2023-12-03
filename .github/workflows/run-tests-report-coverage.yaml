@@ -30,7 +30,6 @@ jobs:
         DAY01_FILE_INPUT_XZ_BASE64: ${{ secrets.DAY01_FILE_INPUT_XZ_BASE64 }}
         DAY01_PART1_SOLN: ${{ secrets.DAY01_PART1_SOLN }}
       run: |
-        poetry shell --quiet --no-interaction;
         coverage run -m pytest; coverage --quiet --skip-empty xml;
         [ $(echo -n "DAY01_FILE_INPUT_XZ_BASE64" | base64 --decode | xz --decompress --stdout | day01part1) -eq $DAY01_PART1_SOLN ];
     - name: Report Code Coverage

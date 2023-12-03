@@ -10,29 +10,27 @@ on:
 
 env:
   PYTHON_MAJOR_MINOR_VERSION: 3.11
-  POETRY_HOME: /opt/poetry
 
 jobs:
   tests-and-coverage:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v3
+    - name: Install Poetry
+      run: pipx install poetry~=1.0;
     - name: Set up Python${{ env.PYTHON_MAJOR_MINOR_VERSION }}
       uses: actions/setup-python@v3
       with:
         python-version: ${{ env.PYTHON_MAJOR_MINOR_VERSION }}
-    - name: Create venv and Install Dependencies
-      run: |
-        python3 -m pip install --upgrade pip;
-        python3 -m venv ${{ env.POETRY_HOME }};
-        ${{ env.POETRY_HOME }}/bin/pip install poetry~=1.0;
-        ${{ env.POETRY_HOME }}/bin/poetry install;
+        cache: 'poetry'
+    - name: Install Dependencies
+      run: poetry install --without dev;
     - name: Run Unit and E2E Tests
       env:
         DAY01_FILE_INPUT_XZ_BASE64: ${{ secrets.DAY01_FILE_INPUT_XZ_BASE64 }}
         DAY01_PART1_SOLN: ${{ secrets.DAY01_PART1_SOLN }}
       run: |
-        ${{ env.POETRY_HOME }}/bin/poetry shell --quiet --no-interaction;
+        poetry shell --quiet --no-interaction;
         coverage run -m pytest; coverage --quiet --skip-empty xml;
         [ $(echo -n "DAY01_FILE_INPUT_XZ_BASE64" | base64 --decode | xz --decompress --stdout | day01part1) -eq $DAY01_PART1_SOLN ];
     - name: Report Code Coverage

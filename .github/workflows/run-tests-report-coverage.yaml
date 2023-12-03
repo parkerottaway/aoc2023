@@ -1,0 +1,43 @@
+name: Run Tests and Report Coverage
+
+on:
+  push:
+  pull_request:
+    branches:
+      - main
+    types:
+      - closed
+
+env:
+  PYTHON_MAJOR_MINOR_VERSION: 3.11
+  POETRY_HOME: /opt/poetry
+
+jobs:
+  tests-and-coverage:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+    - name: Set up Python${{ env.PYTHON_MAJOR_MINOR_VERSION }}
+      uses: actions/setup-python@v3
+      with:
+        python-version: ${{ env.PYTHON_MAJOR_MINOR_VERSION }}
+    - name: Create venv and Install Dependencies
+      run: |
+        python3 -m pip install --upgrade pip;
+        python3 -m venv $POETRY_HOME;
+        $POETRY_HOME/bin/pip install poetry~=1.0;
+        $POETRY_HOME/bin/poetry install;
+    - name: Run Unit and E2E Tests
+      env:
+        DAY01_FILE_INPUT_XZ_BASE64: ${{ secrets.DAY01_FILE_INPUT_XZ_BASE64 }}
+        DAY01_PART1_SOLN: ${{ secrets.DAY01_PART1_SOLN }}
+      run: |
+        $POETRY_HOME/bin/poetry shell --quiet --no-interaction;
+        coverage run -m pytest; coverage --quiet --skip-empty xml;
+        [ $(echo -n "DAY01_FILE_INPUT_XZ_BASE64" | base64 --decode | xz --decompress --stdout | day01part1) -eq $DAY01_PART1_SOLN ];
+    - name: Report Code Coverage
+      uses: irongut/CodeCoverageSummary@v1.3.0
+      with:
+        filename: coverage.xml
+        badge: true
+        thresholds: '70 90'

@@ -12,8 +12,8 @@ def digit_names_to_symbols(input: str) -> str:
     the digit names replaced with the symbol (e.g., a
     string containing the substring 'two' will have every
     instance of 'two' replaced with '2'). Overlapping
-    instances of the digit name will also be substituted
-    (e.g., 'oneight' will be replaced with '18).
+    instances of digit names will also be substituted
+    (e.g., 'oneight' will be replaced with '18').
 
     :param input: Input string to replace all instances of digit names.
     :returns: Empty string, the original string, or a new string with

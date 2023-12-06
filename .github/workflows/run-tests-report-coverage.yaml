@@ -1,0 +1,42 @@
+name: Run Tests and Report Coverage
+
+on:
+  push:
+  pull_request:
+    branches:
+      - main
+    types:
+      - closed
+
+env:
+  PYTHON_MAJOR_MINOR_VERSION: 3.11
+
+jobs:
+  tests-and-coverage:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+    - name: Install Poetry
+      run: pipx install poetry~=1.0;
+    - name: Set up Python${{ env.PYTHON_MAJOR_MINOR_VERSION }}
+      uses: actions/setup-python@v3
+      with:
+        python-version: ${{ env.PYTHON_MAJOR_MINOR_VERSION }}
+        cache: 'poetry'
+    - name: Install Dependencies
+      run: poetry install --without dev;
+    - name: Run Unit and E2E Tests
+      env:
+        DAY01_FILE_INPUT_XZ_BASE64: ${{ secrets.DAY01_FILE_INPUT_XZ_BASE64 }}
+        DAY01_PART1_SOLN: ${{ secrets.DAY01_PART1_SOLN }}
+        DAY01_PART2_SOLN: ${{ secrets.DAY01_PART2_SOLN }}
+      run: |
+        poetry run coverage run -m pytest && poetry run coverage xml;
+        [ $(echo -n "$DAY01_FILE_INPUT_XZ_BASE64" | base64 --decode | xz --decompress --stdout | poetry run day01part1) -eq $DAY01_PART1_SOLN ];
+        [ $(echo -n "$DAY01_FILE_INPUT_XZ_BASE64" | base64 --decode | xz --decompress --stdout | poetry run day01part2) -eq $DAY01_PART2_SOLN ];
+    - name: Report Code Coverage
+      uses: irongut/CodeCoverageSummary@v1.3.0
+      with:
+        filename: coverage.xml
+        badge: true
+        thresholds: '70 90'

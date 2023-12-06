@@ -29,6 +29,7 @@ jobs:
       env:
         DAY01_FILE_INPUT_XZ_BASE64: ${{ secrets.DAY01_FILE_INPUT_XZ_BASE64 }}
         DAY01_PART1_SOLN: ${{ secrets.DAY01_PART1_SOLN }}
+        DAY01_PART2_SOLN: ${{ secrets.DAY01_PART2_SOLN }}
       run: |
         poetry run coverage run -m pytest && poetry run coverage xml;
         [ $(echo -n "$DAY01_FILE_INPUT_XZ_BASE64" | base64 --decode | xz --decompress --stdout | poetry run day01part1) -eq $DAY01_PART1_SOLN ];

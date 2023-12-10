@@ -30,10 +30,15 @@ jobs:
         DAY01_FILE_INPUT_XZ_BASE64: ${{ secrets.DAY01_FILE_INPUT_XZ_BASE64 }}
         DAY01_PART1_SOLN: ${{ secrets.DAY01_PART1_SOLN }}
         DAY01_PART2_SOLN: ${{ secrets.DAY01_PART2_SOLN }}
+        DAY02_FILE_INPUT_XZ_BASE64: ${{ secrets.DAY02_FILE_INPUT_XZ_BASE64 }}
+        DAY02_PART1_SOLN: ${{ secrets.DAY02_PART1_SOLN }}
+        DAY02_PART2_SOLN: ${{ secrets.DAY02_PART2_SOLN }}
       run: |
         poetry run coverage run -m pytest && poetry run coverage xml;
         [ $(echo -n "$DAY01_FILE_INPUT_XZ_BASE64" | base64 --decode | xz --decompress --stdout | poetry run day01part1) -eq $DAY01_PART1_SOLN ];
         [ $(echo -n "$DAY01_FILE_INPUT_XZ_BASE64" | base64 --decode | xz --decompress --stdout | poetry run day01part2) -eq $DAY01_PART2_SOLN ];
+        [ $(echo -n "$DAY02_FILE_INPUT_XZ_BASE64" | base64 --decode | xz --decompress --stdout | poetry run day02part1) -eq $DAY02_PART1_SOLN ];
+        [ $(echo -n "$DAY02_FILE_INPUT_XZ_BASE64" | base64 --decode | xz --decompress --stdout | poetry run day02part2) -eq $DAY02_PART2_SOLN ];
     - name: Report Code Coverage
       uses: irongut/CodeCoverageSummary@v1.3.0
       with:

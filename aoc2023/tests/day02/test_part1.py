@@ -41,7 +41,7 @@ def test_cubeCeiling_enforcesCeiling():
     ),
     reason="Puzzle input or solution not available on filesystem.",
 )
-def test_puzzleSolution_returnsExpectedAnswer(capsys):
+def test_puzzleInput_returnsExpectedAnswer(capsys):
     puzzle_input_file = (
         pathlib.Path(__file__).parent.parent.parent.parent
         / "secrets"

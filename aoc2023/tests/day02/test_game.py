@@ -5,7 +5,7 @@ from aoc2023.day02.game import BlockColorsSet, Game
 
 def test_blockListBuilderEmptyArg_raisesValueError():
     with pytest.raises(ValueError) as ec:
-        g = Game("Game 1:")
+        _ = Game("Game 1:")
     assert ec.value.args[0] == "Did not encounter block color counts."
 
 

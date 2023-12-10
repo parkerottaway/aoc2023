@@ -31,7 +31,7 @@ class Game:
     ) -> Tuple[List[str], List[str], List[str]]:
         """Process the stack of color cube draws and return the list of number
         of cubes drawn for each color cube.
-        
+
         :param gs: Game string stack with 'Game ###:' removed.
         :returns: Three lists, each list holds the number of blocks encountered
                   for each pull of one game.
@@ -60,9 +60,10 @@ class Game:
     def _find_largest_color_counts(self, gs: List[str]) -> BlockColorsSet:
         """Return the largest number of blocks seen in a single
         draw during one one.
-        
+
         :param gs: Game string stack with 'Game ###:' removed.
-        :returns: """
+        :returns: Set of color counts representing the largest number of
+                  blocks observed in the game."""
         reds, blues, greens = self._build_block_color_count_lists(gs)
         bcs = BlockColorsSet(
             red=sorted(reds)[-1] if reds else None,

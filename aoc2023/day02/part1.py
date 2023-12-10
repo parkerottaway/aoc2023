@@ -10,9 +10,11 @@ def cube_set_ceiling_met(cube_set: BlockColorsSet, ceiling: BlockColorsSet) -> b
     """Check if the provided cube set has all cube color counts at or below the
     provided ceiling counts. A cube color count of None is to be interpreted as
     infinity.
-    
+
     :param cube_set: Cube color counts to check.
-    :param ceiling: Cube color counts to compare against."""
+    :param ceiling: Cube color counts to compare against.
+    :returns: Boolean indicating whether or not the cube set meets the
+              ceiling restriction."""
     check_color = (
         lambda s, c, a: (
             (not getattr(c, a)) and getattr(s, a)

@@ -22,6 +22,7 @@ def test_cubeCeiling_enforcesCeiling():
         BlockColorsSet(red=1, green=10, blue=10),
     )
 
+
 @pytest.mark.skipif(
     (
         not (

@@ -7,6 +7,10 @@ from aoc2023.day02.game import BlockColorsSet, Game
 
 
 def calculate_cube_set_power(bcs: BlockColorsSet) -> int:
+    """Returns the product of the counts of each cube color.
+
+    :param bcs: Block color set to find the power of.
+    :returns: Product of the red, green, and blue cube counts."""
     return (
         (bcs.red if bcs.red else 0)
         * (bcs.green if bcs.green else 0)
